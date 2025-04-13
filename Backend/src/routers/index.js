@@ -1,14 +1,16 @@
 const express = require("express");
 const router = new express.Router();
-const User = require("../models");
-const auth = require("../middleware/auth");
+const User = require("../models/index.js");
+const auth = require("../middleware/auth.js");
 const bcrypt = require("bcryptjs");
 const { log } = require("console");
-const { upload } = require('../config/cloudinary');
+const { upload } = require('../config/cloudinary.js');
 const saltRounds = 10;
 require("dotenv").config();
 
-router.post("/createticket", upload.single('file'), async (req, res) => {
+router.post("/createticket", upload.single('file') ,async (req, res) => {
+  console.log(req);
+  
   try {
     const {
       name,
@@ -25,7 +27,8 @@ router.post("/createticket", upload.single('file'), async (req, res) => {
     if (!name || !email || !mobileno || !eventdescription || !date || !startTime || !endTime) {
       return res.status(400).json({ error: "Please fill up all fields" });
     }
-
+    console.log("hi");
+    
     // Get the Cloudinary URL from the uploaded file
     const pdfUrl = req.file ? req.file.path : null;
 
@@ -47,7 +50,7 @@ router.post("/createticket", upload.single('file'), async (req, res) => {
       startTime,
       endTime,
     });
-
+    console.log(ticket);
     await ticket.save();
     res.status(201).json(ticket);
   } catch (err) {
@@ -106,7 +109,7 @@ router.put("/updateticket/:ticketId", auth(["sub-admin", "super-admin"]), async 
 router.get("/ticket", async (req, res) => {
   try {
     const { status } = req.query;
-    console.log(req.query);
+    // console.log(req.query);
     if (!status) {
       const tickets = await User.Ticket.find({});
       // console.log(tickets)
@@ -178,7 +181,7 @@ router.post("/Adminlogin", async (req, res) => {
     if (!passwordMatch) return res.status(400).send("Incorrect password");
 
     const token = await user.generateAuthToken();
-    res.json({ token, role: user.role });
+    res.json({ token, role: user.role,user });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).send("Login failed");

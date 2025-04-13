@@ -63,18 +63,18 @@ function Userlogin() {
         timeout: 10000
       });
   
-      const { token, role } = res.data;
+      const { token, role,user } = res.data;
       console.log(res.data);
-  
+      
       setLoginAttempts(5);
   
       // Secure token storage
       localStorage.setItem("authtoken", token);
-      sessionStorage.setItem("userEmail", email);
+      sessionStorage.setItem("userEmail", user.email);
       
       // Store user data in local storage
       localStorage.setItem("role", role);
-      localStorage.setItem("userEmail", email);
+      localStorage.setItem("name", user.username);
   
       // Enhanced security: Clear sensitive data
       setPassword("");
