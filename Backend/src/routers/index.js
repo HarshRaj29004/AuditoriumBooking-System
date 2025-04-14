@@ -84,7 +84,7 @@ router.post("/createticket", async (req, res) => {
       startTime,
       endTime,
     });
-
+    console.log(ticket);
     await ticket.save();
     console.log("🎫 Ticket saved successfully:", ticket);
     
@@ -149,7 +149,7 @@ router.put("/updateticket/:ticketId", auth(["sub-admin", "super-admin"]), async 
 router.get("/ticket", async (req, res) => {
   try {
     const { status } = req.query;
-    console.log(req.query);
+    // console.log(req.query);
     if (!status) {
       const tickets = await User.Ticket.find({});
       // console.log(tickets)
@@ -221,7 +221,7 @@ router.post("/Adminlogin", async (req, res) => {
     if (!passwordMatch) return res.status(400).send("Incorrect password");
 
     const token = await user.generateAuthToken();
-    res.json({ token, role: user.role });
+    res.json({ token, role: user.role,user });
   } catch (err) {
     console.error("Login error:", err);
     res.status(500).send("Login failed");

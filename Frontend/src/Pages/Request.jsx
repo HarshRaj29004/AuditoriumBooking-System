@@ -36,8 +36,8 @@ function getCurrentDate() {
 
 const AddEvent = () => {
   const [form, setForm] = useState({
-    name: "",
-    email: "",
+    name: `${localStorage.getItem('name')}`,
+    email: `${localStorage.getItem('userEmail')}`,
     mobileno: "",
     eventdescription: "",
     date: "",
@@ -178,18 +178,17 @@ const AddEvent = () => {
     formData.append('startTime', convertMinutesToTime(form.startTime));
     formData.append('endTime', convertMinutesToTime(form.endTime));
     formData.append('file', selectedFile);
-
+    console.log("hello");
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ': ' + pair[1]);
+    }    
+    
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/createticket`,
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }
+        formData
       );
-
+      // Show success toast
       toast.success("Booking Request sent successfully!");
 
       // Reset form
