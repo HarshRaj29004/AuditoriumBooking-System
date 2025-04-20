@@ -72,7 +72,7 @@ function Userlogin() {
   
       // Secure token storage
       localStorage.setItem("authtoken", token);
-      sessionStorage.setItem("userEmail", user.email);
+      localStorage.setItem("userEmail", user.email);
       
       // Store user data in local storage
       localStorage.setItem("role", role);
